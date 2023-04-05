@@ -22,8 +22,9 @@ export default function SearchBar() {
       <button
         className="rounded bg-red-600 px-9 py-2 text-white"
         onClick={() => {
-          if (searchValue === "banana" || searchValue === "") return;
-          router.push("/search");
+          if (searchValue === "") return;
+          router.push(`/search?city=${searchValue.trim().toLowerCase()}`);
+          setSearchValue("");
         }}
       >
         Lets go
