@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 
 import Modal from "@mui/material/Modal";
 import AuthModalInputs from "./AuthModalInputs";
+import useAuth from "../../hooks/useAuth";
 
 const style = {
   position: "absolute" as "absolute",
@@ -20,6 +21,7 @@ const style = {
 
 export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
   const [open, setOpen] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
   const [inputs, setInputs] = React.useState({
     firstName: "",
     lastName: "",
@@ -29,8 +31,31 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
     password: "",
   });
 
+  React.useEffect(() => {
+    if (isSignIn) {
+      if (inputs.email.trim() && inputs.password.trim()) {
+        return setDisabled(false);
+      }
+      return setDisabled(true);
+    } else {
+      if (
+        inputs.firstName.trim() &&
+        inputs.lastName.trim() &&
+        inputs.email.trim() &&
+        inputs.phone.trim() &&
+        inputs.city.trim() &&
+        inputs.password.trim()
+      ) {
+        return setDisabled(false);
+      }
+      return setDisabled(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputs]);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { signin } = useAuth();
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -41,6 +66,12 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
 
   const renderContent = (signinContent: string, signupContents: string) => {
     return isSignIn ? signinContent : signupContents;
+  };
+
+  const handleSubmit = () => {
+    if (isSignIn) {
+      signin({ email: inputs.email, password: inputs.password });
+    }
   };
 
   return (
@@ -78,7 +109,11 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
                 handleInput={handleInput}
                 isSignIn={isSignIn}
               />
-              <button className="bg-red-600 uppercase text-white w-full p-3 rounded text-cm mb-5 disabled:bg-gray-400">
+              <button
+                className="bg-red-600 uppercase text-white w-full p-3 rounded text-cm mb-5 disabled:bg-gray-400"
+                disabled={disabled}
+                onClick={handleSubmit}
+              >
                 {renderContent("Sign in", "Create account")}
               </button>
             </div>
