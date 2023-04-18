@@ -2,10 +2,12 @@
 
 import * as React from "react";
 import Box from "@mui/material/Box";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 import AuthModalInputs from "./AuthModalInputs";
 import useAuth from "../../hooks/useAuth";
+import { AuthenticationContext } from "../context/AuthContext";
+import { Alert } from "@mui/material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -55,7 +57,8 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { signin } = useAuth();
+  const { signin, signup } = useAuth();
+  const { loading, data, error } = React.useContext(AuthenticationContext);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -70,7 +73,9 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
 
   const handleSubmit = () => {
     if (isSignIn) {
-      signin({ email: inputs.email, password: inputs.password });
+      signin({ email: inputs.email, password: inputs.password }, handleClose);
+    } else {
+      signup(inputs, handleClose);
     }
   };
 
@@ -92,6 +97,11 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
       >
         <Box sx={style}>
           <div className="p-2 h-[600px]">
+            {error ? (
+              <Alert severity="error" className="mb-3">
+                {error}
+              </Alert>
+            ) : null}
             <div className="uppercase font-bold text-center pb-2 border-b border-zinc-400 mb-2">
               <p className="text-sm">
                 {renderContent("Sign In", "Create Account")}
@@ -109,13 +119,19 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
                 handleInput={handleInput}
                 isSignIn={isSignIn}
               />
-              <button
-                className="bg-red-600 uppercase text-white w-full p-3 rounded text-cm mb-5 disabled:bg-gray-400"
-                disabled={disabled}
-                onClick={handleSubmit}
-              >
-                {renderContent("Sign in", "Create account")}
-              </button>
+              {loading ? (
+                <div className="flex justify-center ">
+                  <CircularProgress className="text-red-600" />
+                </div>
+              ) : (
+                <button
+                  className="bg-red-600 uppercase text-white w-full p-3 rounded text-cm mb-5 disabled:bg-gray-400"
+                  disabled={disabled}
+                  onClick={handleSubmit}
+                >
+                  {renderContent("Sign in", "Create account")}
+                </button>
+              )}
             </div>
           </div>
         </Box>

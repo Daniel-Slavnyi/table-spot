@@ -72,7 +72,6 @@ export default async function Search({
 
   const location = await fetchLocation();
   const cuisine = await fetchCuisine();
-  console.log("searchParams", searchParams);
   return (
     <>
       <Header />

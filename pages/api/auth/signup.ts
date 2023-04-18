@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import validator from "validator"; // valid gotten data from input
 import bcrypt from "bcrypt"; // hash a password
 import * as jose from "jose"; // make json token
+import { setCookie } from "cookies-next";
 
 const prisma = new PrismaClient();
 
@@ -83,8 +84,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const token = await new jose.SignJWT({email: user.email}).setProtectedHeader({alg}).setExpirationTime("24h").sign(secret)
 
+        setCookie('jwt', token, {req, res, maxAge: 60 * 6 * 24})
+
        return res.status(200).json({
-        token
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+        phone: user.phone,
+        city: user.city,
     })
     }
     
