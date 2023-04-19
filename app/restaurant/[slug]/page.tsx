@@ -17,6 +17,8 @@ interface Restaurant {
   description: string;
   slug: string;
   review: Review[];
+  open_time: string;
+  close_time: string;
 }
 
 const prisma = new PrismaClient();
@@ -32,6 +34,8 @@ const fetchRestaurantBySlug = async (slug: string): Promise<Restaurant> => {
       description: true,
       slug: true,
       review: true,
+      open_time: true,
+      close_time: true,
     },
   });
 
@@ -59,7 +63,10 @@ export default async function Restaurant({
         <Reviews review={restaurant.review} />
       </div>
       <div className="w-[27%] relative text-reg">
-        <ReservationCard />
+        <ReservationCard
+          openTime={restaurant.open_time}
+          closeTime={restaurant.close_time}
+        />
       </div>
     </>
   );
