@@ -1,10 +1,16 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { partySize as partySizes, times } from "../../../../data";
-import DatePicker from "react-datepicker";
+import React, { useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import { partySize as partySizes, times } from '../../../../data';
+import DatePicker from 'react-datepicker';
 
-import useAvailabilities from "../../../../hooks/useAvailabilities";
+import useAvailabilities from '../../../../hooks/useAvailabilities';
+import Link from 'next/link';
+import {
+  convertToDisplayTime,
+  Time,
+} from '../../../../utils/convertToDisplayTime';
 
 export default function ReservationCard({
   openTime,
@@ -17,13 +23,14 @@ export default function ReservationCard({
 }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [time, setTime] = useState(openTime);
-  const [partySize, setPartySize] = useState("2");
-  const [day, setDay] = useState(new Date().toISOString().split("T")[0]);
+  const [partySize, setPartySize] = useState('2');
+  const [day, setDay] = useState(new Date().toISOString().split('T')[0]);
   const { isLoading, error, data, fetchAvailabilities } = useAvailabilities();
+  console.log('data', data);
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
-      setDay(date.toISOString().split("T")[0]);
+      setDay(date.toISOString().split('T')[0]);
       return setSelectedDate(date);
     }
     return setSelectedDate(null);
@@ -38,7 +45,7 @@ export default function ReservationCard({
 
     let isWithinWindow = false;
 
-    times.forEach((item) => {
+    times.forEach(item => {
       if (item.time === openTime) {
         isWithinWindow = true;
       }
@@ -67,11 +74,11 @@ export default function ReservationCard({
           className="py-3 border-b font-light"
           id=""
           value={partySize}
-          onChange={(e) => {
+          onChange={e => {
             setPartySize(e.target.value);
           }}
         >
-          {partySizes.map((item) => (
+          {partySizes.map(item => (
             <option key={item.value} value={item.value}>
               {item.label}
             </option>
@@ -85,7 +92,7 @@ export default function ReservationCard({
             selected={selectedDate}
             onChange={handleChangeDate}
             className="border-b py-3 font-light text-reg w-24"
-            dateFormat={"MMMM d"}
+            dateFormat={'MMMM d'}
             wrapperClassName="w-[48%]"
           />
         </div>
@@ -96,11 +103,11 @@ export default function ReservationCard({
             id=""
             className="py-3 border-b font-light"
             value={time}
-            onChange={(e) => {
+            onChange={e => {
               setTime(e.target.value);
             }}
           >
-            {filterTimeByRestaurantOpenWindow().map((item) => (
+            {filterTimeByRestaurantOpenWindow().map(item => (
               <option key={item.time} value={item.time}>
                 {item.displayTime}
               </option>
@@ -108,14 +115,45 @@ export default function ReservationCard({
           </select>
         </div>
       </div>
+
       <div className="mt-5">
         <button
           className="bg-red-600 rounded w-full px-4 text-white font-bold h-16"
           onClick={handleClick}
+          disabled={isLoading}
         >
-          Find a Time
+          {isLoading ? (
+            <CircularProgress className="text-white" />
+          ) : (
+            'Find a Time'
+          )}
         </button>
       </div>
+      {data && data.length ? (
+        <div className="mt-4">
+          <p className="text-reg">Select a time</p>
+          <div className="flex flex-wrap mt-2">
+            {data.map(item => {
+              return item.available ? (
+                <Link
+                  key={item.time}
+                  href={`/reserve/${slug}?date=${day}T${item.time}&partySize=${partySize}`}
+                  className="bg-red-600 cursos-pointer p-2 w-24 text-center text-white mb-3 rounded mr-3"
+                >
+                  <p className="text-sm font-bold">
+                    {convertToDisplayTime(item.time as Time)}
+                  </p>
+                </Link>
+              ) : (
+                <div
+                  key={item.time}
+                  className="bg-gray-300 p-2 w-24 mb-3 mr-3 rounded"
+                ></div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
