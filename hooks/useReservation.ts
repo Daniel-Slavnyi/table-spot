@@ -16,6 +16,7 @@ export default function useReservation() {
     bookerLastName,
     bookerOccasion,
     bookerRequest,
+    setDidBook,
   }: {
     slug: string;
     partySize: string;
@@ -27,11 +28,12 @@ export default function useReservation() {
     bookerLastName: string;
     bookerOccasion: string;
     bookerRequest: string;
+    setDidBook: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        `http://localhost:3000/api/reserve/${slug}/availability`,
+        `http://localhost:3000/api/restaurant/${slug}/reserve`,
         {
           bookerEmail,
           bookerPhone,
@@ -50,6 +52,7 @@ export default function useReservation() {
       );
       setIsLoading(false);
       setError(null);
+      setDidBook(true);
       return data;
     } catch (error: any) {
       setIsLoading(false);

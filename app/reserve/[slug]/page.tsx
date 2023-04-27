@@ -38,7 +38,11 @@ export default async function Reserve({
           date={searchParams.date}
           partySize={searchParams.partySize}
         />
-        <Form />
+        <Form
+          slug={params.slug}
+          date={searchParams.date}
+          partySize={searchParams.partySize}
+        />
       </div>
     </div>
   );

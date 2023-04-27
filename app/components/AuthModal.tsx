@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Modal from "@mui/material/Modal";
-import AuthModalInputs from "./AuthModalInputs";
-import useAuth from "../../hooks/useAuth";
-import { AuthenticationContext } from "../context/AuthContext";
-import { Alert } from "@mui/material";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Modal from '@mui/material/Modal';
+import AuthModalInputs from './AuthModalInputs';
+import useAuth from '../../hooks/useAuth';
+import { AuthenticationContext } from '../context/AuthContext';
+import { Alert } from '@mui/material';
 
 const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
+  bgcolor: 'background.paper',
   boxShadow: 24,
-  borderRadius: "5px",
+  borderRadius: '5px',
   p: 4,
 };
 
@@ -25,12 +25,12 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
   const [open, setOpen] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [inputs, setInputs] = React.useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    city: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    city: '',
+    password: '',
   });
 
   React.useEffect(() => {
@@ -83,11 +83,11 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
     <div>
       <button
         className={`${
-          isSignIn && "bg-blue-400 text-white mr-3"
+          isSignIn && 'bg-blue-400 text-white mr-3'
         }  border p-1 px-4 rounded `}
         onClick={handleOpen}
       >
-        {renderContent("Sign in", "Sign up")}
+        {renderContent('Sign in', 'Sign up')}
       </button>
       <Modal
         open={open}
@@ -95,8 +95,8 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <div className="p-2 h-[600px]">
+        <Box sx={style} className="max-sm:w-[90%]">
+          <div className="p-2 h-[600px] ">
             {error ? (
               <Alert severity="error" className="mb-3">
                 {error}
@@ -104,14 +104,14 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
             ) : null}
             <div className="uppercase font-bold text-center pb-2 border-b border-zinc-400 mb-2">
               <p className="text-sm">
-                {renderContent("Sign In", "Create Account")}
+                {renderContent('Sign In', 'Create Account')}
               </p>
             </div>
             <div className="m-auot">
               <h2 className="text-2xl font-light text-center">
                 {renderContent(
-                  "Log into your account",
-                  "Create your OpenTable account"
+                  'Log into your account',
+                  'Create your OpenTable account'
                 )}
               </h2>
               <AuthModalInputs
@@ -129,7 +129,7 @@ export default function AuthModal({ isSignIn }: { isSignIn: boolean }) {
                   disabled={disabled}
                   onClick={handleSubmit}
                 >
-                  {renderContent("Sign in", "Create account")}
+                  {renderContent('Sign in', 'Create account')}
                 </button>
               )}
             </div>

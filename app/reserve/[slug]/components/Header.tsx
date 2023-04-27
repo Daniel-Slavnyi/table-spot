@@ -21,15 +21,15 @@ export default function Header({
   return (
     <div>
       <h3 className="font-bold">You are almost done!</h3>
-      <div className="mt-5 flex">
+      <div className="mt-5 flex max-sm:flex-col">
         <img
           src={img}
           alt={`photo of restaurant ${name}`}
-          className="w-32 h-18 rounded"
+          className="w-32 h-18 max-sm:w-[100%]  rounded"
         />
         <div className="ml-4">
-          <h1 className="text-3xl font-bold">{name}</h1>
-          <div className="flex mt-3">
+          <h1 className="text-3xl max-sm:text-xl font-bold">{name}</h1>
+          <div className="flex mt-3 max-sm:flex-col">
             <p className="mr-6">{format(new Date(day), 'ccc, LLL, d')}</p>
             <p className="mr-6">{convertToDisplayTime(time as Time)}</p>
             <p className="mr-6">
