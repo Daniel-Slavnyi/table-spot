@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "prisma generate && npm run migrate:deploy && next build",
+    "prisma:generate:dataproxy": "PRISMA_CLIENT_ENGINE_TYPE=\"dataproxy\" prisma generate",
+    "prisma:generate:library": "PRISMA_CLIENT_ENGINE_TYPE=\"library\" prisma generate",
+    "migrate:deploy": "DATABASE_URL=\"$MIGRATE_DATABASE_URL\" prisma migrate deploy"
   },
   "dependencies": {
     "@emotion/core": "^11.0.0",
