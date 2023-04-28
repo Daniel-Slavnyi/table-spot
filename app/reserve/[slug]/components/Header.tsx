@@ -16,7 +16,7 @@ export default function Header({
   date: string;
   partySize: string;
 }) {
-  const [day, time] = date.split('T');
+  const [day, time] = date?.split('T');
 
   return (
     <div>

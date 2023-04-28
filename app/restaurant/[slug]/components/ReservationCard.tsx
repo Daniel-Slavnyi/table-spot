@@ -30,7 +30,7 @@ export default function ReservationCard({
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
-      setDay(date.toISOString().split('T')[0]);
+      setDay(date.toISOString()?.split('T')[0]);
       return setSelectedDate(date);
     }
     return setSelectedDate(null);

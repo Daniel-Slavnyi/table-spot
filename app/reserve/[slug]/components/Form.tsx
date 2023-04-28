@@ -25,7 +25,7 @@ export default function Form({
   });
 
   const { isLoading, error, createReservation } = useReservation();
-  const [day, time] = date.split('T');
+  const [day, time] = date?.split('T');
 
   useEffect(() => {
     if (

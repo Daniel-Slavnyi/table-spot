@@ -1,62 +1,64 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-import jwt from "jsonwebtoken"; // decode the payload of token for get data of user
+import { NextApiRequest, NextApiResponse } from 'next';
+import { PrismaClient } from '@prisma/client';
+import jwt from 'jsonwebtoken'; // decode the payload of token for get data of user
 
 const prisma = new PrismaClient();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-   
-    
-    // if (!bearerToken) {
-    //     return res.status(401).json({errorMessage: "Unauthorization request (no bearer token)"})
-    // }
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // if (!bearerToken) {
+  //     return res.status(401).json({errorMessage: "Unauthorization request (no bearer token)"})
+  // }
 
-    
-    //  if (!token) {
-        //     return res.status(401).json({errorMessage: "Unauthorization request (no token)"})
-    // }
-        
-    // const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-    
-    // try {
-    //     await jose.jwtVerify(token, secret)
-    // } catch (error) {
-    //    return res.status(401).json({errorMessage: "Unauthorization request(invalid token)"})
-    // }
-    
-    const bearerToken = req.headers["authorization"] as string;
-    const token = bearerToken.split(" ")[1]
+  //  if (!token) {
+  //     return res.status(401).json({errorMessage: "Unauthorization request (no token)"})
+  // }
 
-    const payload = jwt.decode(token) as {email: string}
+  // const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
-    if (!payload.email) {
-        return res.status(401).json({errorMessage: "Unauthorization request(invalid token)"})
-    }
+  // try {
+  //     await jose.jwtVerify(token, secret)
+  // } catch (error) {
+  //    return res.status(401).json({errorMessage: "Unauthorization request(invalid token)"})
+  // }
 
-    const user = await prisma.user.findUnique({
-        where: {
-            email: payload.email
-        },
-        select: {
-            id: true,
-            first_name: true,
-            last_name: true,
-            city: true,
-            email: true,
-            phone: true,
-        }
-    })
+  const bearerToken = req.headers['authorization'] as string;
+  const token = bearerToken?.split(' ')[1];
 
-    if (!user) {
-        return res.status(401).json({errorMessage: "User not found"})
-    }
+  const payload = jwt.decode(token) as { email: string };
 
-    return res.json({
-        id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        city: user.city,
-        email: user.email,
-        phone: user.phone
-    })
+  if (!payload.email) {
+    return res
+      .status(401)
+      .json({ errorMessage: 'Unauthorization request(invalid token)' });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: payload.email,
+    },
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+      city: true,
+      email: true,
+      phone: true,
+    },
+  });
+
+  if (!user) {
+    return res.status(401).json({ errorMessage: 'User not found' });
+  }
+
+  return res.json({
+    id: user.id,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    city: user.city,
+    email: user.email,
+    phone: user.phone,
+  });
 }
