@@ -1,8 +1,8 @@
-import React from "react";
-import { PRICE, PrismaClient } from "@prisma/client";
-import Header from "./components/Header";
-import SearchSideBar from "./components/SearchSideBar";
-import RestaurantCard from "./components/RestaurantCard";
+import React from 'react';
+import { PRICE, PrismaClient } from '@prisma/client';
+import Header from './components/Header';
+import SearchSideBar from './components/SearchSideBar';
+import RestaurantCard from './components/RestaurantCard';
 
 interface SearchParams {
   city?: string;
@@ -84,7 +84,7 @@ export default async function Search({
         <div className="w-5/6">
           {restaurants.length ? (
             <>
-              {restaurants.map((restaurant) => (
+              {restaurants.map(restaurant => (
                 <RestaurantCard restaurant={restaurant} key={restaurant.id} />
               ))}
             </>
