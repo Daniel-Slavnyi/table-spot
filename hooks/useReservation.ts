@@ -33,7 +33,7 @@ export default function useReservation() {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        `http://localhost:3000/api/restaurant/${slug}/reserve`,
+        `${process.env.NEXT_PUBLIC_API_URL}npm /api/restaurant/${slug}/reserve`,
         {
           bookerEmail,
           bookerPhone,
